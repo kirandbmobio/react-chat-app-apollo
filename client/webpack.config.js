@@ -44,17 +44,17 @@ module.exports = {
       library: { type: "var", name: "chat" },
       filename: "remoteEntry.js",
       remotes: {},
-      exposes: {
-        "./Chat": "./src/Chat",
-      },
+      exposes: {},
       shared: {
         ...deps,
         react: {
           singleton: true,
+          eager: true,
           requiredVersion: deps.react,
         },
         "react-dom": {
           singleton: true,
+          eager: true,
           requiredVersion: deps["react-dom"],
         },
       },

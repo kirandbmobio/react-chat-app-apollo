@@ -2,6 +2,7 @@ const { GraphQLServer, PubSub } = require("graphql-yoga");
 const mongoose = require("mongoose");
 
 const { typeDefs, resolvers } = require("./graphql");
+const { authenticateUser } = require("./util/auth");
 
 mongoose.connect("mongodb://localhost:27017/react-chat-o-matic", {
   useNewUrlParser: true,
@@ -17,6 +18,13 @@ db.once("open", function () {
 });
 
 const pubsub = new PubSub();
-const server = new GraphQLServer({ typeDefs, resolvers, context: { pubsub } });
+const server = new GraphQLServer({
+  typeDefs,
+  resolvers,
+  context: (ctx) => {
+    authenticateUser(ctx);
+    return { ...ctx, pubsub };
+  },
+});
 
 server.start(({ port }) => console.log(`Server start at ${port}`));
